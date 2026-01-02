@@ -1,0 +1,41 @@
+name: Build and Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      # API Gateway - Build and Test
+      - name: Install API Gateway dependencies
+        run: npm ci
+
+      - name: Install Backend API dependencies
+        working-directory: ./social_for_bros_api
+        run: npm ci
+
+      - name: Install Frontend dependencies
+        working-directory: ./social_for_bros_web
+        run: npm ci
+
+      - name: Build All
+        run: npm run build
+
+      - name: Test All
+        run: npm run test
