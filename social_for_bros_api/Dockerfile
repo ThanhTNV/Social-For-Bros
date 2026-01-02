@@ -1,5 +1,5 @@
 # Build stage
-FROM node:20-alpine AS builder
+FROM node:20-bookworm AS builder
 
 WORKDIR /app
 
@@ -16,12 +16,12 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:20-alpine
+FROM node:20-bookworm-slim
 
 WORKDIR /app
 
 # Copy package files
-COPY package*.json package-lock.json ./
+COPY package*.json ./
 
 # Install only production dependencies
 RUN npm ci --only=production
