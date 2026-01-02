@@ -26,14 +26,17 @@ services:
     # Backend API Service (you need to create this)
     backend:
         build:
-            context: .
+            context: ./social_for_bros_api
             dockerfile: Dockerfile
         container_name: backend_api
         restart: always
         environment:
+            - PORT=3001
             - NODE_ENV=production
             - DATABASE_URL=postgresql://myuser:mysecretpassword@db:5432/my_learning_db
-            - PORT=3001
+            - JWT_SECRET=your-secret-key-change-this-in-production
+            - JWT_EXPIRES_IN=7d
+            - CORS_ORIGIN=http://api-gateway:3000
         ports:
             - "3001:3001"
         depends_on:
@@ -45,13 +48,16 @@ services:
     # Frontend Web Service (you need to create this)
     frontend:
         build: 
-            context: .
+            context: ./social_for_bros_web
             dockerfile: Dockerfile
         container_name: frontend_web
         restart: always
         environment:
-            - NODE_ENV=production
             - PORT=4200
+            - NODE_ENV=production
+            - API_URL=http://api-gateway:3000
+            - API_PREFIX=api
+            - API_VERSION=v1
         ports:
             - "4200:4200"
         networks:
