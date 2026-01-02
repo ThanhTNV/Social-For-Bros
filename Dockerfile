@@ -13,8 +13,8 @@ RUN npm ci
 # Copy source code
 COPY src ./src
 
-# Build TypeScript
-RUN npm run build
+# Build TypeScript (only API Gateway)
+RUN npm run build:api-gateway
 
 # Production stage
 FROM node:20-bookworm-slim
