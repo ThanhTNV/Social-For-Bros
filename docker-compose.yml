@@ -85,9 +85,9 @@ services:
         ports:
             - "3000:3000"
         depends_on:
-            - backend:
+            backend:
                 condition: service_healthy
-            - frontend:
+            frontend:
                 condition: service_healthy
         networks:
             - private_network
