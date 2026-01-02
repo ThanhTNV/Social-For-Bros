@@ -1,0 +1,42 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+
+            if [ ! -d "Social-For-Bros" ]; then
+              git clone https://github.com/ThanhTNV/Social-For-Bros.git
+            fi
+
+            cd Social-For-Bros
+            git fetch origin
+            git reset --hard origin/main
+
+            docker compose pull || true
+            docker compose down
+            docker compose build
+            docker compose up -d
+
+            docker image prune -f
