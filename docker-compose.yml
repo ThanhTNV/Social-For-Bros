@@ -26,9 +26,11 @@ services:
     # Backend API Service (you need to create this)
     backend:
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+            test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/"]
             interval: 10s
+            timeout: 5s
             retries: 5
+            start_period: 40s
         build:
             context: ./social_for_bros_api
             dockerfile: Dockerfile
@@ -52,9 +54,11 @@ services:
     # Frontend Web Service (you need to create this)
     frontend:
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:4200/health"]
-            interval: 10s
-            retries: 5
+            test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4200/"]
+            interval: 15s
+            timeout: 10s
+            retries: 10
+            start_period: 60s
         build: 
             context: ./social_for_bros_web
             dockerfile: Dockerfile
@@ -88,7 +92,7 @@ services:
             backend:
                 condition: service_healthy
             frontend:
-                condition: service_healthy
+                condition: service_started
         networks:
             - private_network
 
