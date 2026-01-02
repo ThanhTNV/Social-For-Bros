@@ -6,9 +6,9 @@ services:
         container_name: my_postgres_db
         restart: always
         environment:
-            POSTGRES_USER: myuser
-            POSTGRES_PASSWORD: mysecretpassword
-            POSTGRES_DB: my_learning_db
+            - POSTGRES_USER=${POSTGRES_USER:-myuser}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-mysecretpassword}
+            - POSTGRES_DB=${POSTGRES_DB:-my_learning_db}
         ports:
             - "5432:5432"
         volumes:
@@ -25,18 +25,22 @@ services:
 
     # Backend API Service (you need to create this)
     backend:
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+            interval: 10s
+            retries: 5
         build:
             context: ./social_for_bros_api
             dockerfile: Dockerfile
         container_name: backend_api
         restart: always
         environment:
-            - PORT=3001
-            - NODE_ENV=production
-            - DATABASE_URL=postgresql://myuser:mysecretpassword@db:5432/my_learning_db
-            - JWT_SECRET=your-secret-key-change-this-in-production
-            - JWT_EXPIRES_IN=7d
-            - CORS_ORIGIN=http://api-gateway:3000
+            - PORT=${BACKEND_PORT:-3001}
+            - NODE_ENV=${NODE_ENV:-production}
+            - DATABASE_URL=${DATABASE_URL:-postgresql://myuser:mysecretpassword@db:5432/my_learning_db}
+            - JWT_SECRET=${JWT_SECRET:-your-secret-key-change-this-in-production}
+            - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-7d}
+            - CORS_ORIGIN=${CORS_ORIGIN:-http://api-gateway:3000}
         ports:
             - "3001:3001"
         depends_on:
@@ -47,17 +51,21 @@ services:
 
     # Frontend Web Service (you need to create this)
     frontend:
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:4200/health"]
+            interval: 10s
+            retries: 5
         build: 
             context: ./social_for_bros_web
             dockerfile: Dockerfile
         container_name: frontend_web
         restart: always
         environment:
-            - PORT=4200
-            - NODE_ENV=production
-            - API_URL=http://api-gateway:3000
-            - API_PREFIX=api
-            - API_VERSION=v1
+            - PORT=${FRONTEND_PORT:-4200}
+            - NODE_ENV=${NODE_ENV:-production}
+            - API_URL=${API_URL:-http://api-gateway:3000}
+            - API_PREFIX=${API_PREFIX:-api}
+            - API_VERSION=${API_VERSION:-v1}
         ports:
             - "4200:4200"
         networks:
@@ -70,17 +78,17 @@ services:
         container_name: api_gateway
         restart: always
         environment:
-            - NODE_ENV=production
-            - PORT=3000
-            # (Because of Docker networking, we use the service name 'backend')
-            - BACKEND_URL=http://backend:3001
-            # (Because of Docker networking, we use the service name 'frontend')
-            - FRONTEND_URL=http://frontend:4200 
+            - NODE_ENV=${NODE_ENV:-production}
+            - PORT=${GATEWAY_PORT:-3000}
+            - BACKEND_URL=${BACKEND_URL:-http://backend:3001}
+            - FRONTEND_URL=${FRONTEND_URL:-http://frontend:4200} 
         ports:
             - "3000:3000"
         depends_on:
-            - backend
-            - frontend
+            - backend:
+                condition: service_healthy
+            - frontend:
+                condition: service_healthy
         networks:
             - private_network
 
