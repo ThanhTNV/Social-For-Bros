@@ -1,0 +1,35 @@
+{
+  "name": "social_for_bros",
+  "version": "1.0.0",
+  "description": "social with bros",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThanhTNV/Social-For-Bros.git"
+  },
+  "author": "thanhse, golden",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThanhTNV/Social-For-Bros/issues"
+  },
+  "homepage": "https://github.com/ThanhTNV/Social-For-Bros#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.6",
+    "@types/cors": "^2.8.17",
+    "typescript": "^5.9.3",
+    "tsx": "^4.7.0"
+  }
+}
