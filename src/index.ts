@@ -31,7 +31,9 @@ if (NODE_ENV === 'production') {
 }
 
 // Enable CORS
-app.use(cors());
+app.use(cors({
+  origin: 'CORS_URL', // Allow all origins - adjust as needed for security
+}));
 
 // Health check endpoint
 app.get('/health', (req, res) => {

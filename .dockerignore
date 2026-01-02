@@ -9,3 +9,5 @@ README.md
 *.md
 .DS_Store
 postgres_data/*
+npm_data/*
+npm_letsencrypt/*

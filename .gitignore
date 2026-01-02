@@ -7,3 +7,5 @@ yarn-debug.log*
 yarn-error.log*
 .DS_Store
 postgres_data/*
+npm_data/*
+npm_letsencrypt/*
