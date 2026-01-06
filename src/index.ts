@@ -11,24 +11,24 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 // Frontend URL
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4200';
 
-// HTTPS enforcement for production
-if (NODE_ENV === 'production') {
-  app.use((req, res, next) => {
-    // Check if request is secure (HTTPS)
-    // req.secure checks for HTTPS
-    // x-forwarded-proto header is set by load balancers/reverse proxies (AWS ALB, Nginx, etc.)
-    const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
-    
-    if (!isSecure) {
-      // Redirect HTTP to HTTPS
-      return res.redirect(301, `https://${req.headers.host}${req.url}`);
-    }
-    
-    next();
-  });
-  
-  console.log('[Security] HTTPS enforcement enabled for production environment');
-}
+// HTTPS enforcement for production - TEMPORARILY DISABLED
+// if (NODE_ENV === 'production') {
+//   app.use((req, res, next) => {
+//     // Check if request is secure (HTTPS)
+//     // req.secure checks for HTTPS
+//     // x-forwarded-proto header is set by load balancers/reverse proxies (AWS ALB, Nginx, etc.)
+//     const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+//     
+//     if (!isSecure) {
+//       // Redirect HTTP to HTTPS
+//       return res.redirect(301, `https://${req.headers.host}${req.url}`);
+//     }
+//     
+//     next();
+//   });
+//   
+//   console.log('[Security] HTTPS enforcement enabled for production environment');
+// }
 
 // Enable CORS
 app.use(cors({
