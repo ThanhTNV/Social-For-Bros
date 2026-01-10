@@ -38,6 +38,10 @@ jobs:
             git fetch origin
             git reset --hard origin/main
 
+            cd ../
+            cp nginx.conf Social-For-Bros/
+            cd Social-For-Bros
+
             docker compose pull || true
             docker compose down
             docker compose build
