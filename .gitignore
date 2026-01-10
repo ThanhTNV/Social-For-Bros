@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .env
+.env.production
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -9,3 +10,4 @@ yarn-error.log*
 postgres_data/*
 npm_data/*
 npm_letsencrypt/*
+nginx.conf
