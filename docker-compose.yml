@@ -98,20 +98,32 @@ services:
             - private_network
 
     # --- NGINX PROXY MANAGER (NPM) ---
-    nginx-proxy-manager:
-        image: 'jc21/nginx-proxy-manager:latest'
-        container_name: nginx_proxy_manager
+    # nginx-proxy-manager:
+    #     image: 'jc21/nginx-proxy-manager:latest'
+    #     container_name: nginx_proxy_manager
+    #     restart: always
+    #     ports:
+    #     - '80:80'    # Cổng HTTP công cộng
+    #     - '443:443'  # Cổng HTTPS công cộng
+    #     - '81:81'    # Cổng quản lý Admin (Nên giới hạn IP nếu có thể)
+    #     volumes:
+    #     - ./npm_data:/data
+    #     - ./npm_letsencrypt:/etc/letsencrypt
+    #     networks:
+    #     - private_network
+    
+    nginx:
+        image: nginx:1.29.4
+        container_name: nginx_reverse_proxy
         restart: always
         ports:
-        - '80:80'    # Cổng HTTP công cộng
-        - '443:443'  # Cổng HTTPS công cộng
-        - '81:81'    # Cổng quản lý Admin (Nên giới hạn IP nếu có thể)
+            - "80:80"
+            - "443:443"
         volumes:
-        - ./npm_data:/data
-        - ./npm_letsencrypt:/etc/letsencrypt
+            - ./nginx.conf:/etc/nginx/nginx.conf:ro
         networks:
-        - private_network
-        
+            - private_network
+
 networks:
     private_network:
         driver: bridge
