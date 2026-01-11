@@ -41,7 +41,8 @@ services:
             - NODE_ENV=${NODE_ENV:-production}
             - DATABASE_URL=${DATABASE_URL:-postgresql://myuser:mysecretpassword@db:5432/my_learning_db}
             - JWT_SECRET=${JWT_SECRET:-your-secret-key-change-this-in-production}
-            - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-7d}
+            - JWT_EXPIRES_IN_SECONDS=${JWT_EXPIRES_IN_SECONDS:-60}
+            - SESSION_EXPIRES_IN_DAYS=${SESSION_EXPIRES_IN_DAYS:-7}
             - CORS_ORIGIN=${CORS_ORIGIN:-http://api-gateway:3000}
         ports:
             - "3001:3001"
