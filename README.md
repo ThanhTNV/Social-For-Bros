@@ -1,3 +1,4 @@
+[![Build and Test](https://github.com/ThanhTNV/Social-For-Bros/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/ThanhTNV/Social-For-Bros/actions/workflows/build-and-test.yml)
 # Social For Bros - API Gateway
 
 This is the API Gateway service that routes requests to the backend API and frontend application.
